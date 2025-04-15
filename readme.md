@@ -18,7 +18,8 @@ The **AI Resume Builder** is a web-based platform that helps users create profes
 ## 2. Tech Stack
 
 ### **Frontend**
-- JavaScript ( React.js )
+
+- JavaScript (React.js)
 
 ### **Backend**
 - JavaScript (Node.js, Express.js)

@@ -1,0 +1,557 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   RESUME BUILDER
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.builder-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #f4f5fb;
+    overflow: hidden;           /* keeps topbar fixed — body scrolls independently */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── Top Bar ─────────────────────────────────────────────────────────────────── */
+.builder-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+    height: 58px;
+    min-height: 58px;          /* never shrink */
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    flex-shrink: 0;
+    gap: 0.75rem;
+    overflow: hidden;          /* prevent wrapping */
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.btn-back {
+    background: none;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+.btn-back:hover { border-color: #667eea; color: #667eea; }
+
+.resume-title-input {
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    outline: none;
+    min-width: 0;
+    flex: 1;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.resume-title-input:hover,
+.resume-title-input:focus { background: #f3f4f6; }
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+/* All topbar buttons share this base */
+.btn-upload,
+.btn-preview,
+.btn-export,
+.btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;           /* increased from 0.42rem 0.85rem */
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    line-height: 1;
+    text-decoration: none;
+}
+
+/* Import PDF — label acting as button */
+.btn-upload {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    color: #6b7280;
+}
+.btn-upload:hover { border-color: #667eea; color: #667eea; background: #f0f0ff; }
+
+/* Preview toggle */
+.btn-preview {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    color: #6b7280;
+}
+.btn-preview:hover { border-color: #667eea; color: #667eea; background: #f0f0ff; }
+.btn-preview.active {
+    background: #ede9fe;
+    border-color: #a78bfa;
+    color: #5b21b6;
+}
+
+/* Export PDF */
+.btn-export {
+    background: #f0f0ff;
+    border: 1.5px solid #c7d2fe;
+    color: #4f46e5;
+}
+.btn-export:hover { background: #e0e7ff; border-color: #818cf8; }
+
+/* AI Review */
+.btn-ai-review {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1.5px solid #c4b5fd;
+    color: #5b21b6;
+}
+.btn-ai-review:hover { background: #ddd6fe; border-color: #a78bfa; }
+.btn-ai-review.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.35);
+}
+
+/* AI Chat */
+.btn-ai-chat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    color: #15803d;
+}
+.btn-ai-chat:hover { background: #dcfce7; border-color: #4ade80; }
+.btn-ai-chat.active {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(22,163,74,0.35);
+}
+
+/* Save */
+.btn-save {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.35);
+}
+.btn-save:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+.btn-save:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ── Body ────────────────────────────────────────────────────────────────────── */
+.builder-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ── Form Panel ──────────────────────────────────────────────────────────────── */
+.builder-form-panel {
+    width: 100%;
+    max-width: 680px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.25rem 1.5rem 3rem;   /* extra bottom padding so last section isn't clipped */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: #f4f5fb;
+    /* Smooth scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #c7d2fe #f4f5fb;
+}
+
+.builder-form-panel::-webkit-scrollbar { width: 6px; }
+.builder-form-panel::-webkit-scrollbar-track { background: #f4f5fb; }
+.builder-form-panel::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 3px; }
+
+/* When preview is open, form takes exactly half */
+.builder-body.with-preview .builder-form-panel {
+    width: 50%;
+    max-width: 50%;
+    flex-shrink: 0;
+}
+
+/* ── Preview Panel ───────────────────────────────────────────────────────────── */
+.builder-preview-panel {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #dde1ea;
+    border-left: 1px solid #c9cdd6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem 3rem;
+    /* Smooth scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #a5b4fc #dde1ea;
+}
+
+.builder-preview-panel::-webkit-scrollbar { width: 6px; }
+.builder-preview-panel::-webkit-scrollbar-track { background: #dde1ea; }
+.builder-preview-panel::-webkit-scrollbar-thumb { background: #a5b4fc; border-radius: 3px; }
+
+/* Scale the A4 resume (794px) to fit the panel width */
+.builder-preview-panel > div {
+    transform-origin: top center;
+    /* JS sets --preview-scale via inline style; fallback 0.7 */
+    transform: scale(var(--preview-scale, 0.72));
+    margin-bottom: calc((var(--preview-scale, 0.72) - 1) * 1123px);
+    flex-shrink: 0;
+}
+
+/* ── Template Selector ───────────────────────────────────────────────────────── */
+.template-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.65rem 1rem;
+    flex-wrap: wrap;
+}
+
+.template-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.template-btn {
+    padding: 0.32rem 0.8rem;
+    border-radius: 6px;
+    border: 1.5px solid #e5e7eb;
+    background: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: capitalize;
+    color: #6b7280;
+    transition: all 0.18s;
+}
+.template-btn:hover { border-color: #667eea; color: #667eea; }
+.template-btn.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 2px 8px rgba(102,126,234,0.3);
+}
+
+/* ── Collapsible Sections ────────────────────────────────────────────────────── */
+.builder-section {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: visible;          /* was 'hidden' — that was clipping the Add buttons */
+}
+
+.section-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.2rem;
+    background: none;
+    border: none;
+    border-radius: 12px 12px 0 0;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    transition: background 0.15s;
+    text-align: left;
+}
+.section-toggle:hover { background: #f9fafb; }
+
+.section-body {
+    padding: 1rem 1.2rem 1.4rem;    /* generous bottom so Add buttons are fully visible */
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    border-top: 1px solid #f0f0f5;
+}
+
+/* ── Form Grid ───────────────────────────────────────────────────────────────── */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.form-full { grid-column: 1 / -1; }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+}
+
+.form-group label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #374151;
+    letter-spacing: 0.2px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 0.52rem 0.8rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    font-family: inherit;
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    color: #1a1a2e;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+}
+
+/* ── AI Button ───────────────────────────────────────────────────────────────── */
+.btn-ai {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.42rem 0.85rem;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border: 1.5px solid #c4b5fd;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #5b21b6;
+    cursor: pointer;
+    transition: all 0.18s;
+    align-self: flex-start;
+}
+.btn-ai:hover:not(:disabled) { background: #ddd6fe; border-color: #a78bfa; }
+.btn-ai:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ── Tag Input ───────────────────────────────────────────────────────────────── */
+.tag-input-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tag-input-row input {
+    flex: 1;
+    padding: 0.52rem 0.8rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.18s;
+    font-family: inherit;
+}
+.tag-input-row input:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.12); }
+
+.btn-add-tag {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 8px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #667eea;
+    transition: all 0.18s;
+}
+.btn-add-tag:hover { background: #f0f0ff; border-color: #667eea; }
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    min-height: 0;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 0.22rem 0.55rem 0.22rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #7c3aed;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+    line-height: 1;
+}
+.tag button:hover { opacity: 1; }
+
+/* ── List Item Cards (experience, education, projects) ───────────────────────── */
+.list-item-card {
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: #fafafa;
+}
+
+.list-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.list-item-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d1d5db;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    border-radius: 5px;
+    transition: color 0.18s, background 0.18s;
+}
+.btn-remove:hover { color: #ef4444; background: #fff5f5; }
+
+.btn-add-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.6rem 1.1rem;         /* taller so it's easy to see and click */
+    background: #f8f9ff;
+    border: 1.5px dashed #a5b4fc;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: #4f46e5;
+    cursor: pointer;
+    transition: all 0.18s;
+    align-self: flex-start;
+    margin-top: 0.25rem;            /* small gap above the button */
+}
+.btn-add-item:hover {
+    background: #ede9fe;
+    border-color: #667eea;
+    border-style: solid;
+    color: #3730a3;
+}
+
+/* ── Spin animation ──────────────────────────────────────────────────────────── */
+.spin-icon { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Full-page loader ────────────────────────────────────────────────────────── */
+.full-page-loader {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f5fb;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    /* Hide preview panel on smaller screens */
+    .builder-preview-panel { display: none; }
+    .builder-body.with-preview .builder-form-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .builder-topbar { padding: 0 0.75rem; gap: 0.3rem; }
+    .form-grid-2 { grid-template-columns: 1fr; }
+
+    /* Hide text labels on small screens, keep icons */
+    .btn-upload  .btn-label,
+    .btn-preview .btn-label,
+    .btn-export  .btn-label { display: none; }
+
+    .btn-upload,
+    .btn-preview,
+    .btn-export { padding: 0.42rem 0.55rem; }
+}

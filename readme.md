@@ -1,64 +1,53 @@
-# Capstone Project: AI Resume Builder
+# EliteCV – AI Powered Resume Builder
 
-## 1. Project Idea Brief
-The **AI Resume Builder** is a web-based platform that helps users create professional resumes using AI-powered content suggestions. It enables users to:
-- Input details and receive **smart recommendations**.
-- Export **well-formatted resumes**.
-- **Parse uploaded resumes** for content extraction.
-
-### **Key Features**
-- ✅ **User Authentication** (Username/Password & Google OAuth)
-- ✅ **AI-Powered Resume Content Suggestions**
-- ✅ **File Upload** for Resume Parsing
-- ✅ **Download & Share Resume** as PDF
-- ✅ **Database Storage** for User Resumes
+## Overview
+EliteCV is a full-stack AI-powered resume builder that helps users create professional and ATS-friendly resumes efficiently. The platform uses AI to generate summaries, suggest skills, review resume content, and improve the overall resume writing experience.
 
 ---
 
-## 2. Tech Stack
+# Features
 
-### **Frontend**
-- JavaScript ( React.js )
-
-### **Backend**
-- JavaScript (Node.js, Express.js)
-
-### **Database**
-- MongoDB
-
-### **Authentication**
-- **JWT** (JSON Web Tokens)  
-- **Google OAuth**  
-
-### **AI Integration**
-- **OpenAI API** (for resume content suggestions)
-
-### **Cloud Storage**
-- **Firebase** or **AWS S3** (for file uploads)
-
-### **Deployment**
-- **Netlify** (Frontend)  
-- **Render** (Backend)
+- AI-generated professional summaries and skill suggestions  
+- Resume review and content improvement using OpenAI API  
+- Resume upload and parsing functionality  
+- Real-time resume preview  
+- ATS-friendly PDF export  
+- Autosave and form validation  
+- Responsive and user-friendly interface  
 
 ---
 
-## 3. Daily Plan & Timeline (10 Days)
+# How It Works
 
-| **Day**  | **Tasks** |
-|----------|----------|
-| **Day 1** | ✅ Setup GitHub Repository (Add README, issues, projects) <br> ✅ Initialize React.js (Frontend) & Node.js (Backend) |
-| **Day 2** | ✅ Setup MongoDB & define database schema for resumes <br> ✅ Implement User Authentication (JWT + Google OAuth) |
-| **Day 3** | ✅ Create **GET API** endpoint to fetch user resumes <br> ✅ Create **POST API** endpoint to submit resume data |
-| **Day 4** | ✅ Implement **Frontend UI** (Basic Resume Builder form) <br> ✅ Fetch data from **GET API** to display resumes |
-| **Day 5** | ✅ Integrate **AI Resume Suggestions** using OpenAI API |
-| **Day 6** | ✅ Implement **File Upload** functionality (PDF/DOCX parsing) |
-| **Day 7** | ✅ Develop **PUT API** for updating resume data <br> ✅ Develop **DELETE API** for removing resumes |
-| **Day 8** | ✅ Deploy **Backend on Render** & **Frontend on Vercel** <br> ✅ Ensure APIs are working post-deployment |
-| **Day 9** | ✅ Conduct **final testing & bug fixes** <br> ✅ Merge all PRs & request **CodiumAI review** |
-| **Day 10** | ✅ Record **3-minute demo video** explaining project <br> ✅ Submit **GitHub Repo, PR links & video** |
+1. Users enter resume details such as skills, education, projects, and experience.  
+2. AI features generate summaries, suggest skills, and improve resume content.  
+3. The platform shows a live resume preview while editing.  
+4. Users can export resumes as professionally formatted PDFs.  
 
 ---
 
-This is **Markdown-formatted**, making it easy to use in a **GitHub README, documentation, or project tracker**. 🚀  
+# Tech Stack
 
-Would you like any changes or additions, such as **API route details** or **database schema**? 😊
+- Frontend: React.js, Tailwind CSS  
+- Backend: Node.js, Express.js  
+- Database: MongoDB, Mongoose  
+- AI Integration: OpenAI API  
+- Authentication: JWT / Google OAuth  
+
+---
+
+# What Makes EliteCV Different
+
+- AI assistance integrated directly into the resume editor  
+- Focus on ATS-friendly resume creation  
+- Real-time preview with AI suggestions  
+- Resume parsing support for faster profile setup  
+- Beginner-friendly and modern user experience  
+
+---
+
+# Conclusion
+
+EliteCV combines AI and full-stack development to simplify resume creation and help users build professional resumes faster and more effectively.
+
+# Deploy Link :- https://elite-cv.netlify.app/
